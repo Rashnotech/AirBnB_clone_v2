@@ -13,7 +13,7 @@ class State(BaseModel, Base):
     name = Column(String(128), nullable=False)
 
     if storage_type == 'db':
-        cities = relationship('City', backref='state', cascade='all, delete')
+        cities = relationship('City', back_populates='states', cascade='all, delete')
 
     @property
     def cities(self):
