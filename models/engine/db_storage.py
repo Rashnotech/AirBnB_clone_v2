@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """ a module that stores in the database """
-from sqlalchemy from create_engine
-from sqlalchemy.orm from sessionmaker, scoped_session
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, scoped_session
 from models.base_model import Base, BaseModel
 from models.user import User
 from models.place import Place
@@ -47,8 +47,6 @@ class DBStorage:
                 dict: A dictionary with keys in the format below
                 <class-name>.<object-id>
         """
-        from models import
-
         obj_dict = {}
         if cls:
             result = self.__session.query(cls)
@@ -92,6 +90,6 @@ class DBStorage:
         Create all tables in the database and create the current database
         session.
         """
-        Base.metadata.create_all(engine)
+        Base.metadata.create_all(self.__engine)
         self.__session = scope_session(sessionmaker(self.__engine,
             expire_on_commit=False))
