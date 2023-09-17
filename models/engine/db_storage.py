@@ -91,5 +91,5 @@ class DBStorage:
         session.
         """
         Base.metadata.create_all(self.__engine)
-        self.__session = scope_session(sessionmaker(self.__engine,
-            expire_on_commit=False))
+        session = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        self.__session = scoped_session(session)
