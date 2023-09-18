@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """ a module that stores in the database """
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker, scoped_session
 from models.base_model import Base, BaseModel
 from models.user import User
@@ -50,11 +50,11 @@ class DBStorage:
         """
         obj_dict = {}
         if cls:
-            result = self.__session.query(cls)
+            result = self.__session.query(cls).all()
         else:
             result = []
             for class_name in self.classes:
-                result.append(self.__session.query(classes[class_name]))
+                result.append(self.__session.query(self.classes[class_name]).all())
         for obj in result:
             key = '{}.{}'.format(type(obj).__name__, obj.id)
             obj_dict[key] = obj

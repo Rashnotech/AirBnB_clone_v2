@@ -230,7 +230,6 @@ class HBNBCommand(cmd.Cmd):
     def do_all(self, args):
         """ Shows all objects, or all objects of a class"""
         print_list = []
-        my_dict = models.storage.all()
 
         if args:
             args = args.split(' ')[0]  # remove possible trailing args
@@ -238,10 +237,12 @@ class HBNBCommand(cmd.Cmd):
                 print("** class doesn't exist **")
                 return
             else:
+                my_dict = storage.all(args)
                 for key, value in my_dict.items():
                     if args == value.to_dict()['__class__']:
                         print_list.append(str(value))
         else:
+            my_dict = storage.all()
             for key in my_dict:
                 print_list.append(str(my_dict[key]))
         print(print_list)
