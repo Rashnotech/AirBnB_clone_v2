@@ -17,7 +17,7 @@ class BaseModel:
 
     def __init__(self, *args, **kwargs):
         """Instatntiates a new model"""
-        print(kwargs)
+        self.id = str(uuid.uuid4())
         if not kwargs:
             from models import storage
             self.id = str(uuid.uuid4())
@@ -28,10 +28,10 @@ class BaseModel:
                 if attr == 'updated_at' or attr == 'created_at':
                     setattr(self, attr, datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f'))
                 elif attr == '__class__':
-                    pass
+                    del attr
                 else:
                     setattr(self, attr, value)
-            del kwargs['__class__']
+            #del kwargs['__class__']
             self.__dict__.update(kwargs)
 
     def __str__(self):
