@@ -146,8 +146,9 @@ class HBNBCommand(cmd.Cmd):
         if class_name not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[class_name](attributes)
+        new_instance = HBNBCommand.classes[class_name](**attributes)
         storage.save()
+        new_instance.save()
         print(new_instance.id)
         storage.save()
 
