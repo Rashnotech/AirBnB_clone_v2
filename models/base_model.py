@@ -17,21 +17,19 @@ class BaseModel:
 
     def __init__(self, *args, **kwargs):
         """Instatntiates a new model"""
-        print(kwargs)
         if not kwargs:
             from models import storage
             self.id = str(uuid.uuid4())
-            self.created_at = datetime.now()
-            self.updated_at = datetime.now()
+            self.created_at = datetime.utcnow()
+            self.updated_at = datetime.utcnow()
         else:
             for attr, value in kwargs.items():
                 if attr == 'updated_at' or attr == 'created_at':
-                    setattr(self, attr, datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f'))
+                    setattr(self, attr, value.strftime('%Y-%m-%dT%H:%M:%S.%f'))
                 elif attr == '__class__':
-                    pass
+                    del attr
                 else:
                     setattr(self, attr, value)
-            del kwargs['__class__']
             self.__dict__.update(kwargs)
 
     def __str__(self):
