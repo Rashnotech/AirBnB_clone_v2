@@ -3,11 +3,12 @@
 from models.base_model import BaseModel, Base
 from sqlalchemy import String, Column
 from sqlalchemy.orm import relationship
-from os import getenv
+from os import environ
+
 
 class State(BaseModel, Base):
     """ State class """
-    storage_type = getenv('HBNB_TYPE_STORAGE')
+    storage_type = environ.get('HBNB_TYPE_STORAGE', 'file')
 
     __tablename__ = 'states'
     name = Column(String(128), nullable=False)

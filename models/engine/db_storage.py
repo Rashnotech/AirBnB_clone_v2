@@ -9,7 +9,7 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
-from os import getenv
+from os import environ
 
 
 class DBStorage:
@@ -28,13 +28,14 @@ class DBStorage:
               }
     def __init__(self):
         """ Initialize the DBStorage instance. """
-        user = getenv('HBNB_MYSQL_USER')
-        passwd = getenv('HBNB_MYSQL_PWD')
-        host = getenv('HBNB_MYSQL_HOST', default='localhost')
-        db = getenv('HBNB_MYSQL_DB')
+        user = environ.get('HBNB_MYSQL_USER')
+        passwd = environ.get('HBNB_MYSQL_PWD')
+        host = environ.get('HBNB_MYSQL_HOST', 'localhost')
+        db = environ.get('HBNB_MYSQL_DB')
+
         self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'
                 .format(user, passwd, host, db), pool_pre_ping=True)
-        if getenv('HBNB_ENV') == 'test':
+        if environ.get('HBNB_ENV') == 'test':
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
