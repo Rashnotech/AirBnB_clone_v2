@@ -10,7 +10,7 @@ from models.city import City
 from models.amenity import Amenity
 from models.review import Review
 from os import environ
-
+import sys
 
 class DBStorage:
     """
@@ -50,6 +50,9 @@ class DBStorage:
         """
         obj_dict = {}
         if cls:
+            name = sys.modules[__name__]
+            
+            cls = getattr(name, cls)
             result = self.__session.query(cls).all()
         else:
             result = []
