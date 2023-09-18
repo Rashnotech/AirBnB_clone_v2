@@ -142,6 +142,10 @@ class HBNBCommand(cmd.Cmd):
                     print('Invalid integer value: '.format(value))
                     continue
             attributes[key] = value
+            base = BaseModel()
+            attributes['id'] = base.id
+            attributes['created_at'] = base.created_at
+            attributes['updated_at'] = base.updated_at
 
         if class_name not in HBNBCommand.classes:
             print("** class doesn't exist **")
@@ -232,13 +236,15 @@ class HBNBCommand(cmd.Cmd):
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            for k, v in storage._FileStorage__objects.items():
-                if k.split('.')[0] == args:
-                    print_list.append(str(v))
+            else:
+                my_dict = storage.all(args)
+                for key, value in my_dict.items():
+                    if args == value.to_dict()['__class__']:
+                        print_list.append(str(value))
         else:
-            for k, v in storage._FileStorage__objects.items():
-                print_list.append(str(v))
-
+            my_dict = storage.all()
+            for key in my_dict:
+                print_list.append(str(my_dict[key]))
         print(print_list)
 
     def help_all(self):
