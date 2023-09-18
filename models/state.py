@@ -15,7 +15,8 @@ class State(BaseModel, Base):
 
     if storage_type == 'db':
         cities = relationship('City', backref='state', cascade='all, delete')
-
+    else:
+        cities = self.cities
     @property
     def cities(self):
         """Getter attribute instance for FileStorage"""
