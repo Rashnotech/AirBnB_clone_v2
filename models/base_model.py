@@ -22,20 +22,16 @@ class BaseModel:
         self.updated_at = datetime.utcnow()
         if not kwargs:
             from models import storage
-            self.id = str(uuid.uuid4())
             self.created_at = datetime.utcnow()
             self.updated_at = datetime.utcnow()
         else:
             for attr, value in kwargs.items():
                 if attr == 'updated_at' or attr == 'created_at':
-                    print(type(value))
-                    setattr(self, attr, value.fromisoformat(str(value)))
+                    setattr(self, attr, datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f"))
                 elif attr == '__class__':
                     del attr
                 else:
                     setattr(self, attr, value)
-            #del kwargs['__class__']
-            self.__dict__.update(kwargs)
 
     def __str__(self):
         """Returns a string representation of the instance"""
