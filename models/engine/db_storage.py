@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """ a module that stores in the database """
-from sqlalchemy import create_engine, text
-from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, scoped_session, Session
 from models.base_model import Base, BaseModel
 from models.user import User
 from models.place import Place
@@ -10,7 +10,7 @@ from models.city import City
 from models.amenity import Amenity
 from models.review import Review
 from os import environ
-import sys
+from sys import modules
 
 class DBStorage:
     """
@@ -21,11 +21,7 @@ class DBStorage:
     """
     __engine = None
     __session = None
-    classes = {
-               'BaseModel': BaseModel, 'User': User, 'Place': Place,
-               'State': State, 'City': City, 'Amenity': Amenity,
-               'Review': Review
-              }
+
     def __init__(self):
         """ Initialize the DBStorage instance. """
         user = environ.get('HBNB_MYSQL_USER')
@@ -48,16 +44,21 @@ class DBStorage:
                 dict: A dictionary with keys in the format below
                 <class-name>.<object-id>
         """
+        classes = {
+                 'BaseModel': BaseModel, 'User': User, 'Place': Place,
+                 'State': State, 'City': City, 'Amenity': Amenity,
+                 'Review': Review
+                 }
         obj_dict = {}
         if cls:
-            name = sys.modules[__name__]
-            
+            name = modules[__name__]
             cls = getattr(name, cls)
             result = self.__session.query(cls).all()
         else:
             result = []
-            for class_name in self.classes:
-                result.append(self.__session.query(self.classes[class_name]).all())
+            for class_name in classes:
+                result.extend(self.__session.query(getattr(modules[__name__],
+                    classes[class_name])).all())
         for obj in result:
             key = '{}.{}'.format(type(obj).__name__, obj.id)
             obj_dict[key] = obj
