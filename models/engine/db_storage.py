@@ -45,7 +45,7 @@ class DBStorage:
                 <class-name>.<object-id>
         """
         classes = {
-                 'BaseModel': BaseModel, 'User': User, 'Place': Place,
+                 'User': User, 'Place': Place,
                  'State': State, 'City': City, 'Amenity': Amenity,
                  'Review': Review
                  }
