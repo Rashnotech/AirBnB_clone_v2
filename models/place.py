@@ -6,7 +6,7 @@ from sqlalchemy.orm import relationship
 
 
 place_amenity = Table('place_amenity', Base.metadata,
-        Column('place_id', ForeignKey('place.id'), primary_key=True, nullable=False),
+        Column('place_id', ForeignKey('places.id'), primary_key=True, nullable=False),
         Column('amenity_id', ForeignKey('amenities.id'), primary_key=True, nullable=False))
 
 class Place(BaseModel, Base):
@@ -40,9 +40,9 @@ class Place(BaseModel, Base):
     @amenities.setter
     def amenities(self, obj):
         """ a setter instance method """
-        for isinstance(obj, Amenity):
-             if obj.id not in self.amenity_ids:
-                 self.amenity_ids.append(obj.id)
+        if isinstance(obj, Amenity):
+            if obj.id not in self.amenity_ids:
+                self.amenity_ids.append(obj.id)
 
     def append_amenity(self, amenity_id):
         """ method to append amenity.id to amenity_ids """
