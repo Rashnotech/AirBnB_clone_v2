@@ -10,7 +10,7 @@ from models.city import City
 from models.amenity import Amenity
 from models.review import Review
 from os import environ
-import sys
+from sys import modules
 
 class DBStorage:
     """
@@ -51,13 +51,14 @@ class DBStorage:
                  }
         obj_dict = {}
         if cls:
-            name = sys.modules[__name__]
+            name = modules[__name__]
             cls = getattr(name, cls)
             result = self.__session.query(cls).all()
         else:
             result = []
             for class_name in classes:
-                result.extend(self.__session.query(classes[class_name]).all())
+                result.extend(self.__session.query(getattr(modules[__name__],
+                    classes[class_name])).all())
         for obj in result:
             key = '{}.{}'.format(type(obj).__name__, obj.id)
             obj_dict[key] = obj
