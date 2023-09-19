@@ -57,8 +57,7 @@ class DBStorage:
         else:
             result = []
             for class_name in classes:
-                result.extend(self.__session.query(getattr(modules[__name__],
-                    classes[class_name])).all())
+                result.extend(self.__session.query(classes[class_name]).all())
         for obj in result:
             key = '{}.{}'.format(type(obj).__name__, obj.id)
             obj_dict[key] = obj
