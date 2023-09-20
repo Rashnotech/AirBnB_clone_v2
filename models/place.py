@@ -3,6 +3,7 @@
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, ForeignKey, Integer, Float, String, Table
 from sqlalchemy.orm import relationship
+from os import environ
 
 
 place_amenity = Table('place_amenity', Base.metadata,
@@ -15,16 +16,28 @@ class Place(BaseModel, Base):
     city_id = Column(String(60), ForeignKey('cities.id'), nullable=False)
     user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
     name = Column(String(128), nullable=False)
-    description = Column(String(1024), nullable=False)
+    description = Column(String(1024))
     number_rooms = Column(Integer, nullable=False, default=0)
     number_bathrooms = Column(Integer, nullable=False, default=0)
     max_guest = Column(Integer, nullable=False, default=0)
     price_by_night = Column(Integer, nullable=False, default=0)
-    latitude = Column(Float, nullable=False)
-    longitude = Column(Float, nullable=False)
+    latitude = Column(Float)
+    longitude = Column(Float)
     amenity_ids = []
-    amenities = relationship('Amenity', secondary='place_amenity',
-        viewonly=False, backref='places')
+    reviews = relationship('Review', backref='place', cascade='all, delete')
+    amenities = relationship('Amenity', secondary=
+'place_amenity', viewonly=False)
+
+
+    if environ.get('HBNB_TYPE_STORAGE') != 'db':
+        @property
+        def reviews(self):
+            """getter function for reviews"""
+            rev_list = []
+            for review in list(storage.all(Review).values()):
+                if review.place_id == self.id:
+                    rev_list.append(review)
+            return rev_list
 
     @property
     def amenities(self):
@@ -48,4 +61,3 @@ class Place(BaseModel, Base):
         """ method to append amenity.id to amenity_ids """
         if amenity_id not in self.amenity_ids:
             self.amenity_ids.append(amenity_id)
-
