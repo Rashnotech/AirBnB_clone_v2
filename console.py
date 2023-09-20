@@ -144,13 +144,16 @@ class HBNBCommand(cmd.Cmd):
             attributes[key] = value
             base = BaseModel()
             attributes['id'] = base.id
-            attributes['created_at'] = base.created_at
-            attributes['updated_at'] = base.updated_at
+            if 'id' not in attributes or 'created_at' not in attributes:
+                attributes['id'] = base.id
+                attributes['created_at'] = base.created_at
+                attributes['updated_at'] = base.updated_at
 
         if class_name not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
         new_instance = HBNBCommand.classes[class_name](**attributes)
+        
         storage.save()
         new_instance.save()
         print(new_instance.id)

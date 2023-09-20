@@ -21,12 +21,16 @@ class BaseModel:
         if not kwargs:
             from models import storage
             self.id = str(uuid.uuid4())
-            self.created_at = datetime.utcnow()
-            self.updated_at = datetime.utcnow()
+            self.created_at = datetime.now()
+            self.updated_at = datetime.now()
         else:
             for attr, value in kwargs.items():
                 if attr == 'updated_at' or attr == 'created_at':
-                    setattr(self, attr, value.strftime('%Y-%m-%dT%H:%M:%S.%f'))
+                    if isinstance(value, str):
+                        setattr(self, attr, datetime.strptime(value,
+                            '%Y-%m-%dT%H:%M:%S.%f'))
+                    else:
+                        setattr(self, attr, value.strftime('%Y-%m-%dT%H:%M:%S.%f'))
                 elif attr == '__class__':
                     del attr
                 else:
