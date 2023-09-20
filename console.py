@@ -142,10 +142,10 @@ class HBNBCommand(cmd.Cmd):
                     print('Invalid integer value: '.format(value))
                     continue
             attributes[key] = value
-            base = BaseModel()
-            attributes['id'] = base.id
-            attributes['created_at'] = base.created_at
-            attributes['updated_at'] = base.updated_at
+            #base = BaseModel()
+            #attributes['id'] = base.id
+            #attributes['created_at'] = base.created_at
+            #attributes['updated_at'] = base.updated_at
 
         if class_name not in HBNBCommand.classes:
             print("** class doesn't exist **")
