@@ -124,7 +124,6 @@ class HBNBCommand(cmd.Cmd):
         for token in args[1:]:
             params = token.split('=')
             if len(params) != 2:
-                print('Invalid parameter: {}'.format(token))
                 continue
             key, value = params[0], params[1]
             if value.startswith('"') and value.endswith('"'):
@@ -133,13 +132,11 @@ class HBNBCommand(cmd.Cmd):
                 try:
                     value = float(value)
                 except ValueError:
-                    print('Invalid float value: {}'.format(value))
                     continue
             else:
                 try:
                     value = int(value)
                 except ValueError:
-                    print('Invalid integer value: '.format(value))
                     continue
             attributes[key] = value
 
