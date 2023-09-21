@@ -4,6 +4,7 @@ import json
 from models.state import State
 from models.place import Place
 
+
 class FileStorage:
     """This class manages storage of hbnb models in JSON format"""
     __file_path = 'file.json'
@@ -11,8 +12,8 @@ class FileStorage:
 
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
-        if cls is not None:
-            if type(cls) == str:
+        if cls:
+            if isinstance(cls, str):
                 cls = eval(cls)
             my_dict = {}
             for key, value in FileStorage.__objects.items():

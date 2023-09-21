@@ -12,6 +12,7 @@ from models.review import Review
 from os import environ
 from sys import modules
 
+
 class DBStorage:
     """
         DBStorage class that implements the storage in database
@@ -29,8 +30,8 @@ class DBStorage:
         host = environ.get('HBNB_MYSQL_HOST', 'localhost')
         db = environ.get('HBNB_MYSQL_DB')
 
-        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'
-                .format(user, passwd, host, db), pool_pre_ping=True)
+        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.format(
+            user, passwd, host, db), pool_pre_ping=True)
         if environ.get('HBNB_ENV') == 'test':
             Base.metadata.drop_all(self.__engine)
 
@@ -63,7 +64,6 @@ class DBStorage:
             obj_dict[key] = obj
         return obj_dict
 
-
     def new(self, obj):
         """
         Add the object to the current database session.
@@ -72,22 +72,20 @@ class DBStorage:
         """
         self.__session.add(obj)
 
-
     def save(self):
         """Commit all changes of the current database session."""
         self.__session.commit()
 
-
     def delete(self, obj=None):
-        """ 
-        Delete an object from the current database session if it's not None.
+        """
+        Delete an object from the current database session if it's
+        not None.
 
         Args:
             obj (BaseModel): The object to delete from the session
         """
         if obj:
             self.__session.delete(obj)
-
 
     def reload(self):
         """

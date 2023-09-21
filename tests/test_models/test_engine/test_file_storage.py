@@ -127,7 +127,8 @@ class test_fileStorage(unittest.TestCase):
         base = BaseModel()
         user = User()
         for obj in storage.all(BaseModel).values():
-            self.assertTrue(type(obj) == BaseModel)
+            self.assertTrue(isinstance(obj, BaseModel))
 
         for obj in storage.all().values():
-            self.assertTrue(type(obj) == BaseModel or type(obj == User))
+            self.assertTrue(isinstance(obj, BaseModel) or
+                            isinstance(obj, User))
