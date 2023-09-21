@@ -28,7 +28,7 @@ class TestHBNBCommand(unittest.TestCase):
         HBNBCommand().onecmd("help")
         output = self.fake_stdout.getvalue()
         assert "Documented commands (type help <topic>):" in output
-    
+
     def test_empty_line(self):
         """ Test empty line """
         HBNBCommand().onecmd(" ")
@@ -71,7 +71,7 @@ class TestHBNBCommand(unittest.TestCase):
         HBNBCommand().onecmd("update BaseModel")
         output = self.fake_stdout.getvalue()
         assert "** instance id missing **" in output
- 
+
     def tearDown(self):
         """Tear down the console"""
         self.patcher.stop()

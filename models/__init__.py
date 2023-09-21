@@ -11,8 +11,7 @@ from models.amenity import Amenity
 from models.review import Review
 from models.city import City
 
-
-storage_type = environ.get('HBNB_TYPE_STORAGE') 
+storage_type = environ.get('HBNB_TYPE_STORAGE')
 if storage_type == 'db':
     storage = DBStorage()
     storage.reload()

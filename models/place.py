@@ -7,8 +7,11 @@ from os import environ
 
 
 place_amenity = Table('place_amenity', Base.metadata,
-        Column('place_id', ForeignKey('places.id'), primary_key=True, nullable=False),
-        Column('amenity_id', ForeignKey('amenities.id'), primary_key=True, nullable=False))
+                      Column('place_id', ForeignKey('places.id'),
+                             primary_key=True, nullable=False),
+                      Column('amenity_id', ForeignKey('amenities.id'),
+                             primary_key=True, nullable=False))
+
 
 class Place(BaseModel, Base):
     """ A place to stay """
@@ -25,9 +28,8 @@ class Place(BaseModel, Base):
     longitude = Column(Float)
     amenity_ids = []
     reviews = relationship('Review', backref='place', cascade='all, delete')
-    amenities = relationship('Amenity', secondary=
-'place_amenity', viewonly=False)
-
+    amenities = relationship('Amenity', secondary='place_amenity',
+                             viewonly=False)
 
     if environ.get('HBNB_TYPE_STORAGE') != 'db':
         @property
