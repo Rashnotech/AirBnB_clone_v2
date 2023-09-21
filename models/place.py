@@ -3,6 +3,8 @@
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, ForeignKey, Integer, Float, String, Table
 from sqlalchemy.orm import relationship
+from sqlalchemy.ext.associationproxy import association_proxy
+
 from os import environ
 
 
@@ -47,7 +49,7 @@ class Place(BaseModel, Base):
         from models import storage
         amenities_list = []
         for amenity_id in self.amenity_ids:
-            amenity = storage.all(Amenity)
+            amenity = storage.all(Amenity).get(amenity_id)
             if amenity_id in amenity:
                 amenities_list.append(amenity)
         return amenities_list

@@ -7,6 +7,7 @@ from io import StringIO
 import os
 import unittest
 from console import HBNBCommand
+from models import *
 
 
 class TestHBNBCommand(unittest.TestCase):
@@ -37,7 +38,7 @@ class TestHBNBCommand(unittest.TestCase):
 
     def test_create_command(self):
         """Test create command"""
-        HBNBCommand().onecmd("create BaseModel")
+        HBNBCommand().onecmd("create State")
         output = self.fake_stdout.getvalue()
         self.assertIsNotNone(output)
 
@@ -50,19 +51,19 @@ class TestHBNBCommand(unittest.TestCase):
 
     def test_show_command(self):
         """Test show command """
-        HBNBCommand().onecmd("show BaseModel")
+        HBNBCommand().onecmd("show State")
         output = self.fake_stdout.getvalue()
         self.assertIsNotNone(output)
 
     def test_destroy_command(self):
         """Test all command"""
-        HBNBCommand().onecmd("destroy BaseModel")
+        HBNBCommand().onecmd("destroy State")
         output = self.fake_stdout.getvalue()
         assert "** instance id missing **" in output
 
     def test_all_command(self):
         """Test all command"""
-        HBNBCommand().onecmd("all BaseModel")
+        HBNBCommand().onecmd("all State")
         output = self.fake_stdout.getvalue()
         assert '[]' in output
 
