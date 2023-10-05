@@ -46,10 +46,10 @@ exec { 'link':
   require    => [Exec['directory'], File["/data/web_static/releases/test/index.html"]],
 }
 
-exec { 'change owner':
-  command    => 'chown -R ubuntu:ubuntu /data/web_static',
+file { '/data/web_static':
+  owner => 'ubuntu',
+  group => 'ubuntu',
   require    => Exec['directory'],
-  provider   => shell,
 }
 
 exec { 'run':
