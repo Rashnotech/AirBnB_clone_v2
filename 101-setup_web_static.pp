@@ -43,10 +43,11 @@ file { '/data/web_static/releases/test/index.html':
 exec { 'link':
   command    => "ln -sf $test_dir $current_dir",
   provider   => shell,
+  require    => [Exec['directory'], File["/data/web_static/releases/test/index.html"]],
 }
 
 exec { 'change owner':
-  command    => 'chown -R ubuntu:ubuntu /data/',
+  command    => "chown -R ubuntu:ubuntu /data/web_static",
   require    => Exec['directory'],
   provider   => shell,
 }
