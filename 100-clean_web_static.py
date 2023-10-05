@@ -17,16 +17,17 @@ def do_clean(number=0):
     number = int(number)
     if number == 0:
         number = 1
+        print(number)
 
-    archives = os.listdir('versions')
+    archives = sorted(os.listdir("versions"))
     for i in range(number):
-        archives.sorted.pop()
-    with lcd('versions'):
+        archives.pop()
+    with lcd("versions"):
         for tar in archives:
-            local('rm {}'.format(tar))
+            local("rm {}".format(tar))
 
-    with cd('/data/web_static/releases'):
-        archives = run('ls -tr').split()
+    with cd("/data/web_static/releases"):
+        archives = run("ls -tr").split()
         for tar in archives:
             if 'web_static_' in tar:
                 archives = tar
@@ -34,4 +35,4 @@ def do_clean(number=0):
         for i in range(number):
             archives.pop()
         for tar in archives:
-            run('rm -rf {}'.format(tar))
+            run("rm -rf {}".format(tar))
