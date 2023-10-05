@@ -37,24 +37,21 @@ file { '/etc/nginx/sites-available/default':
 file { '/data/web_static/releases/test/index.html':
   ensure  => file,
   content => 'Holberton School',
+  require => Exec['directory'],
 }
 
-exec { 'remove_current_directory':
-  command  => 'rm -rf /data/web_static/current',
-  onlyif   => 'test -d /data/web_static/current',
-  path     => ['/bin', '/usr/bin'],
-  }
-
-file { $current_dir:
-  ensure  => link,
-  target  => '/data/web_static/releases/test',
-  owner   => 'ubuntu',
-  group   => 'ubuntu',
+exec { 'link':
+  command    => "ln -sf $test_dir $current_dir",
+  provider   => shell,
 }
 
-service { 'nginx':
-  ensure    => 'running',
-  enable    => true,
-  require   => [Package['nginx'], File['/etc/nginx/sites-available/default']],
-  subscribe => File['/etc/nginx/sites-available/default'],
+exec { 'owner':
+  command => 'chown -R ubuntu:ubuntu /data/',
+  require => Exec['directory'],
+  provider   => shell,
+}
+
+exec { 'run':
+  command  => 'service nginx restart',
+  provider => shell,
 }
