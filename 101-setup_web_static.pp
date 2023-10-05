@@ -11,7 +11,7 @@ package { 'nginx':
 }
 
 exec { 'install nginx':
-  command  => 'sudo apt update && sudo apt -y install nginx',
+  command  => 'apt update && apt -y install nginx',
   provider => shell,
   require  => Package['nginx'],
 }
@@ -45,9 +45,9 @@ exec { 'link':
   provider   => shell,
 }
 
-exec { 'owner':
-  command => 'chown -R ubuntu:ubuntu /data/',
-  require => Exec['directory'],
+exec { 'change owner':
+  command    => 'chown -R ubuntu:ubuntu /data/',
+  require    => Exec['directory'],
   provider   => shell,
 }
 
