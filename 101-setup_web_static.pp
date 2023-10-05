@@ -10,10 +10,10 @@ package { 'nginx':
   ensure => installed,
 }
 
-exec { 'install nginx'
-  command  => 'sudo apt update && sudo apt install -y nginx',
+exec { 'install nginx':
+  command  => 'sudo apt update && sudo apt -y install nginx',
   provider => shell,
-  require  => Package['nginx']
+  require  => Package['nginx'],
 }
 
 file { '/etc/nginx/sites-available/default':
@@ -27,12 +27,6 @@ file { '/etc/nginx/sites-available/default':
     }
   }",
   require => Exec['install nginx'],
-}
-
-file { [$web_static_dir, $test_dir, $shared_dir, $current_dir]:
-  ensure => directory,
-  owner  => 'ubuntu',
-  group  => 'ubuntu',
 }
 
 file { '/data/web_static/releases/test/index.html':
