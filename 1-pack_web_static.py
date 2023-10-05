@@ -11,7 +11,7 @@ def do_pack():
         timestamp = time.strftime("%Y%m%d%H%M%S")
         archive = "versions/web_static_{}.tgz".format(timestamp)
         local("mkdir -p versions")
-        local("tar -czf {} web_static".format(archive))
+        local("tar -cvzf {} web_static".format(archive))
         return archive
     except Exception as e:
         return None
