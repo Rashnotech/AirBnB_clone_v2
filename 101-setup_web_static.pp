@@ -41,7 +41,7 @@ file { '/data/web_static/releases/test/index.html':
 }
 
 exec { 'link':
-  command    => "ln -sf $test_dir $current_dir",
+  command    => "ln -sF $test_dir $current_dir",
   provider   => shell,
 }
 

@@ -4,7 +4,7 @@ from fabric.api import local, cd, lcd, env
 import os
 
 
-env.hosts = ['rashnotech.tech', '54.162.47.71']
+env.hosts = ["rashnotech.tech", "54.162.47.71"]
 env.user = "ubuntu"
 
 
@@ -12,7 +12,7 @@ def do_clean(number=0):
     """
     A function that delete all unecessaray archive
     Args:
-      number: variable that keeps the most recent archives 
+      number: variable that keeps the most recent archives
     """
     number = int(number)
     if number == 0:
