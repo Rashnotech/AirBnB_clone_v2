@@ -1,6 +1,11 @@
 # puppet script that sets up your web servers for deployment
 include stdlib
 
+$web_static_dir = '/data/web_static'
+$test_dir = "${web_static_dir}/releases/test"
+$shared_dir = "${web_static_dir}/shared"
+$current_dir = "${web_static_dir}/current"
+
 package { 'nginx':
   ensure => installed,
 }
@@ -24,9 +29,10 @@ file { '/etc/nginx/sites-available/default':
   require => Exec['install nginx'],
 }
 
-exec { 'directory':
-  command  => 'mkdir -p /data/web_static/releases/test /data/web_static/shared',
-  provider => shell,
+file { [$web_static_dir, $test_dir, $shared_dir, $current_dir]:
+  ensure => directory,
+  owner  => 'ubuntu',
+  group  => 'ubuntu',
 }
 
 file { '/data/web_static/releases/test/index.html':
@@ -34,13 +40,13 @@ file { '/data/web_static/releases/test/index.html':
   content => 'Holberton School',
 }
 
-file { '/data/web_static':
+file { $web_static_dir:
   ensure  => directory,
   recurse => true,
   require => File['/data/web_static/releases/test/index.html'],
 }
 
-file { '/data/web_static/current':
+file { $current_dir:
   ensure  => link,
   target  => '/data/web_static/releases/test',
   owner   => 'ubuntu',
