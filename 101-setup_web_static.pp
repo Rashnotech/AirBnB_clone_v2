@@ -16,6 +16,11 @@ exec { 'install nginx':
   require  => Package['nginx'],
 }
 
+exec { 'directory':
+  command  => "mkdir -p $web_static_dir $current_dir $shared_dir $test_dir",
+  provider => shell,
+}
+
 file { '/etc/nginx/sites-available/default':
   ensure  => file,
   content => "server {
@@ -29,22 +34,22 @@ file { '/etc/nginx/sites-available/default':
   require => Exec['install nginx'],
 }
 
-file { [$web_static_dir, $test_dir, $shared_dir]:
-  ensure  => directory,
-  owner   => 'ubuntu',
-  group   => 'ubuntu',
-}
-
 file { '/data/web_static/releases/test/index.html':
   ensure  => file,
   content => 'Holberton School',
 }
 
+exec { 'remove_current_directory':
+  command  => 'rm -rf /data/web_static/current',
+  onlyif   => 'test -d /data/web_static/current',
+  path     => ['/bin', '/usr/bin'],
+  }
+
 file { $current_dir:
   ensure  => link,
   target  => '/data/web_static/releases/test',
   owner   => 'ubuntu',
-  group   => 'ubuntu',iiiiii
+  group   => 'ubuntu',
 }
 
 service { 'nginx':
