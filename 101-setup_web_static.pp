@@ -13,7 +13,6 @@ package { 'nginx':
 exec { 'install nginx'
   command  => 'sudo apt update && sudo apt install -y nginx',
   provider => shell,
-  require  => Package['nginx']
 }
 
 file { '/etc/nginx/sites-available/default':
