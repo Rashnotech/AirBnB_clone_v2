@@ -16,12 +16,17 @@ file { '/etc/nginx/sites-available/default':
   content => "server {
     listen 80 default_server;
     server_name _;
-    root /var/www/html/;
+    root /var/www/html;
     location /hbnb_static {
       alias /data/web_static/current;
     }
   }",
   require => Exec['install nginx'],
+}
+
+exec { 'directory':
+  command  => 'mkdir -p /data/web_static/releases/test /data/web_static/shared',
+  provider => shell,
 }
 
 file { '/data/web_static/releases/test/index.html':
