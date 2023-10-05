@@ -47,7 +47,7 @@ exec { 'link':
 }
 
 exec { 'change owner':
-  command    => "chown -R ubuntu:ubuntu /data/web_static",
+  command    => 'chown -R ubuntu:ubuntu /data/web_static',
   require    => Exec['directory'],
   provider   => shell,
 }
