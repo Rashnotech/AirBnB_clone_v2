@@ -10,9 +10,10 @@ package { 'nginx':
   ensure => installed,
 }
 
-exec { 'install nginx'
+exec { 'install nginx':
   command  => 'sudo apt update && sudo apt -y install nginx',
   provider => shell,
+  require  => Package['nginx'],
 }
 
 file { '/etc/nginx/sites-available/default':
@@ -28,10 +29,10 @@ file { '/etc/nginx/sites-available/default':
   require => Exec['install nginx'],
 }
 
-file { [$web_static_dir, $test_dir, $shared_dir, $current_dir]:
-  ensure => directory,
-  owner  => 'ubuntu',
-  group  => 'ubuntu',
+file { [$web_static_dir, $test_dir, $shared_dir]:
+  ensure  => directory,
+  owner   => 'ubuntu',
+  group   => 'ubuntu',
 }
 
 file { '/data/web_static/releases/test/index.html':
@@ -39,22 +40,15 @@ file { '/data/web_static/releases/test/index.html':
   content => 'Holberton School',
 }
 
-file { $web_static_dir:
-  ensure  => directory,
-  recurse => true,
-  require => File['/data/web_static/releases/test/index.html'],
-}
-
 file { $current_dir:
   ensure  => link,
   target  => '/data/web_static/releases/test',
   owner   => 'ubuntu',
-  group   => 'ubuntu',
-  require => File['/data/web_static'],
+  group   => 'ubuntu',iiiiii
 }
 
 service { 'nginx':
-  ensure    => 'running'
+  ensure    => 'running',
   enable    => true,
   require   => [Package['nginx'], File['/etc/nginx/sites-available/default']],
   subscribe => File['/etc/nginx/sites-available/default'],
