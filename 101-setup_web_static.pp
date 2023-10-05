@@ -17,7 +17,7 @@ exec { 'install nginx':
 }
 
 exec { 'directory':
-  command  => "mkdir -p $web_static_dir $current_dir $shared_dir $test_dir",
+  command  => "mkdir -p ${web_static_dir} ${current_dir} ${shared_dir} ${test_dir}",
   provider => shell,
 }
 
@@ -41,15 +41,16 @@ file { '/data/web_static/releases/test/index.html':
 }
 
 exec { 'link':
-  command    => "ln -sF $test_dir $current_dir",
-  provider   => shell,
-  require    => [Exec['directory'], File["/data/web_static/releases/test/index.html"]],
+  command  => "ln -sF ${test_dir} ${current_dir}",
+  provider => shell,
+  require  => [Exec['directory'], File['/data/web_static/releases/test/index.html']],
 }
 
 file { '/data/web_static':
-  owner => 'ubuntu',
-  group => 'ubuntu',
-  require    => Exec['directory'],
+  ensure  => directory,
+  owner   => 'ubuntu',
+  group   => 'ubuntu',
+  require => Exec['directory'],
 }
 
 exec { 'run':
