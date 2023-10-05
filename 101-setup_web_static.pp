@@ -49,7 +49,7 @@ file { $current_dir:
 }
 
 service { 'nginx':
-  ensure    => 'running'
+  ensure    => 'running',
   enable    => true,
   require   => [Package['nginx'], File['/etc/nginx/sites-available/default']],
   subscribe => File['/etc/nginx/sites-available/default'],
