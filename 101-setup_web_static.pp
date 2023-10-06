@@ -73,4 +73,5 @@ class web_static_setup {
   }
 }
 
+
 include web_static_setup
