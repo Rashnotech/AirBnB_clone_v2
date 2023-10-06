@@ -1,77 +1,57 @@
 # puppet script that sets up your web servers for deploymenta
 
-class web_static_setup {
-  # Ensure Nginx is installed
-  package { 'nginx':
-    ensure => installed,
-  }
+exec { 'install nginx':
+command => '/usr/bin/apt -y update; /usr/bin/apt -y install nginx',
+}
 
-  # Create necessary directories
-  file { '/data':
-    ensure => directory,
-    owner  => 'ubuntu',
-    group  => 'ubuntu',
-    mode   => '0755',
-  }
-  
-  file { '/data/web_static/releases':
-    ensure => directory,
-    owner  => 'ubuntu',
-    group  => 'ubuntu',
-    mode   => '0755'
-  }
+exec { 'create directories':
+command  => 'mkdir -p /data/web_static/releases/test/; mkdir -p /data/web_static/shared/',
+provider => shell,
+}
 
-  file { '/data/web_static/releases/test':
-    ensure => directory,
-    owner  => 'ubuntu',
-    group  => 'ubuntu',
-    mode   => '0755',
-  }
-  
-  # Create a HTML file
-  file { '/data/web_static/releases/test/index.html':
-    ensure  => file,
-    content => '<html><body>Holberton School.</body></html>',
-    owner   => 'ubuntu',
-    group   => 'ubuntu',
-    mode    => '0644',
-  }
+exec { 'write':
+command  => 'echo "hello world!" | sudo tee /data/web_static/releases/test/index.html',
+require  => Exec['install nginx'],
+provider => shell,
+}
 
-  # Create or recreate symbolic link
-  file { '/data/web_static/current':
-    ensure =>link,
-    target => '/data/web_static/releases/test',
-    force  => true,
-    owner  => 'ubuntu',
-    group  => 'ubuntu',
-  }
+exec { 'link':
+command  => 'ln -sf /data/web_static/releases/test/ /data/web_static/current',
+require  => Exec['create directories'],
+provider => shell,
+}
 
-  # Update Nginx configuration to serve content
-  file { '/etc/nginx/sites-available/default':
-    ensure  => file,
-    content => "
-      server {
-        listen 80 default_server;
-        server_name _;
-        location /hbnb_static {
-          alias /data/web_static/current;
-        }
-        location / {
-          try_files \$uri \uri/ =404;
-        }
-      }
-    ",
-    notify  => Service['nginx'],
-  }
-
-  # Ensure Nginx service is running and restart on config change
-  service { 'nginx':
-    ensure => running,
-    enable => true,
-    hasrestart => true,
-    require    => File['/etc/nginx/sites-available/default'],
-  }
+exec { 'change owner':
+command  => 'chown -R ubuntu:ubuntu /data/',
+require  => Exec['create directories'],
+provider => shell,
 }
 
 
-include web_static_setup
+exec {'configure server':
+command  => 'printf %s "server {
+	listen 80 default_server;
+	listen [::]:80 default_server;
+	add_header X-Served-By $HOSTNAME;
+	root /var/www/html;
+	index index.html index.htm;
+
+	location /hbnb_static {
+		alias /data/web_static/current;
+		index index.html index.htm;
+	}
+	rewrite ^/redirect_me https://google.com;
+	error_page 404 /404.html;
+	location /404 {
+		root /var/www/html;
+		internal;
+	}
+}" > /etc/nginx/sites-available/default',
+require  => Exec['install nginx'],
+provider => shell,
+}
+
+exec { 'run':
+command  => 'service nginx restart',
+provider => shell,
+}
