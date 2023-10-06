@@ -17,17 +17,22 @@ def do_clean(number=0):
     number = int(number)
     if number == 0:
         number = 1
-	with lcd("versions"):
-		for tar in archives:
-local("rm {}".format(tar))
+        print(number)
+
+    archives = sorted(os.listdir("versions"))
+    for _ in range(number):
+        archives.pop()
+    with lcd("versions"):
+        for arc in archives:
+            local("rm {}".format(arc))
 
     with cd("/data/web_static/releases"):
-        archives = run("ls -tr").split()
-        for tar in archives:
-            if 'web_static_' in tar:
-                archives = tar
-        archives = list(archives)
-        for i in range(number):
-            archives.pop()
-        for tar in archives:
-            run("rm -rf {}".format(tar))
+        archieves = run("ls -tr").split()
+        for arc in archieves:
+            if "web_static_" in arc:
+                archieves = arc
+        archieves = list(archieves)
+        for _ in range(number):
+            archieves.pop()
+        for arc in archieves:
+            run("rm -rf {}".format(arc))
