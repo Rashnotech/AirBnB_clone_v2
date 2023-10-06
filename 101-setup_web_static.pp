@@ -1,7 +1,8 @@
 # puppet script that sets up your web servers for deploymenta
 
 exec { 'install nginx':
-  command => 'apt -y update && apt -y install nginx',
+  command  => 'apt update && apt -y install nginx',
+  provider => shell,
 }
 
 exec { 'make directories':
