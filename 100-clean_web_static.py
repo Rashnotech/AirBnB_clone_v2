@@ -17,14 +17,9 @@ def do_clean(number=0):
     number = int(number)
     if number == 0:
         number = 1
-        print(number)
-
-    archives = sorted(os.listdir("versions"))
-    for i in range(number):
-        archives.pop()
-    with lcd("versions"):
-        for tar in archives:
-            local("rm {}".format(tar))
+	with lcd("versions"):
+		for tar in archives:
+local("rm {}".format(tar))
 
     with cd("/data/web_static/releases"):
         archives = run("ls -tr").split()
