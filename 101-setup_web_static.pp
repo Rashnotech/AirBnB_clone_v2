@@ -1,59 +1,76 @@
-# puppet script that sets up your web servers for deployment
-include stdlib
+# puppet script that sets up your web servers for deploymenta
 
-$web_static_dir = '/data/web_static'
-$test_dir = "${web_static_dir}/releases/test"
-$shared_dir = "${web_static_dir}/shared"
-$current_dir = "${web_static_dir}/current"
+class web_static_setup {
+  # Ensure Nginx is installed
+  package { 'nginx':
+    ensure => installed,
+  }
 
-package { 'nginx':
-  ensure => installed,
+  # Create necessary directories
+  file { '/data':
+    ensure => directory,
+    owner  => 'ubuntu',
+    group  => 'ubuntu',
+    mode   => '0755',
+  }
+  
+  file { '/data/web_static/releases':
+    ensure => directory,
+    owner  => 'ubuntu',
+    group  => 'ubuntu',
+    mode   => '0755'
+  }
+
+  file { '/data/web_static/releases/test':
+    ensure => directory,
+    owner  => 'ubuntu',
+    group  => 'ubuntu',
+    mode   => '0755',
+  }
+  
+  # Create a HTML file
+  file { '/data/web_static/releases/test/index.html':
+    ensure  => file,
+    content => '<html><body>Holberton School.</body></html>',
+    owner   => 'ubuntu',
+    group   => 'ubuntu',
+    mode    => '0644',
+  }
+
+  # Create or recreate symbolic link
+  file { '/data/web_static/current':
+    ensure =>link,
+    target => '/data/web_static/releases/test',
+    force  => true,
+    owner  => 'ubuntu',
+    group  => 'ubuntu',
+  }
+
+  # Update Nginx configuration to serve content
+  file { '/etc/nginx/sites-available/default':
+    ensure  => file,
+    content => "
+      server {
+        listen 80 default_server;
+        server_name _;
+        location /hbnb_static {
+          alias /data/web_static/current;
+        }
+        location / {
+          try_files \$uri \uri/ =404;
+        }
+      }
+    ",
+    notify  => Service['nginx'],
+  }
+
+  # Ensure Nginx service is running and restart on config change
+  service { 'nginx':
+    ensure => running,
+    enable => true,
+    hasrestart => true,
+    require    => File['/etc/nginx/sites-available/default'],
+  }
 }
 
-exec { 'install nginx':
-  command  => 'apt update && apt -y install nginx',
-  provider => shell,
-  require  => Package['nginx'],
-}
-
-exec { 'directory':
-  command  => "mkdir -p ${web_static_dir} ${current_dir} ${shared_dir} ${test_dir}",
-  provider => shell,
-}
-
-file { '/etc/nginx/sites-available/default':
-  ensure  => file,
-  content => "server {
-    listen 80 default_server;
-    server_name _;
-    root /var/www/html;
-    location /hbnb_static {
-      alias /data/web_static/current;
-    }
-  }",
-  require => Exec['install nginx'],
-}
-
-file { '/data/web_static/releases/test/index.html':
-  ensure  => file,
-  content => 'Holberton School',
-  require => Exec['directory'],
-}
-
-exec { 'link':
-  command  => "ln -sF ${test_dir} ${current_dir}",
-  provider => shell,
-  require  => [Exec['directory'], File['/data/web_static/releases/test/index.html']],
-}
-
-file { '/data/web_static':
-  ensure  => directory,
-  owner   => 'ubuntu',
-  group   => 'ubuntu',
-  require => Exec['directory'],
-}
-
-exec { 'run':
-  command  => 'service nginx restart',
-  provider => shell,
-}
+include web_static_setup
