@@ -30,12 +30,12 @@ exec { 'owner':
 
 
 file {'/etc/nginx/sites-available/default':
-  ensure   => file,
-  content  => "
+  ensure  => file,
+  content => "
     server {
       listen 80 default_server;
       listen [::]:80 default_server;
-      add_header X-Served-By $hostname;
+      add_header X-Served-By ${hostname};
       root /var/www/html;
       index index.html index.htm;
       location /hbnb_static {
@@ -49,7 +49,7 @@ file {'/etc/nginx/sites-available/default':
 	internal;
       }
   }",
-  require  => Exec['install nginx'],
+  require => Exec['install nginx'],
 }
 
 exec { 'run':
