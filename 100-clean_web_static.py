@@ -4,7 +4,7 @@ from fabric.api import local, cd, lcd, env
 import os
 
 
-env.hosts = ["rashnotech.tech", "54.162.47.71"]
+env.hosts = ["35.174.208.242", "54.162.47.71"]
 env.user = "ubuntu"
 
 
@@ -17,7 +17,6 @@ def do_clean(number=0):
     number = int(number)
     if number == 0:
         number = 1
-        print(number)
 
     archives = sorted(os.listdir("versions"))
     for _ in range(number):
@@ -27,12 +26,12 @@ def do_clean(number=0):
             local("rm {}".format(arc))
 
     with cd("/data/web_static/releases"):
-        archieves = run("ls -tr").split()
-        for arc in archieves:
+        archives = run("ls -ltr").split()
+        for arc in archives:
             if "web_static_" in arc:
-                archieves = arc
-        archieves = list(archieves)
+                archives = arc
+        archives = list(archives)
         for _ in range(number):
-            archieves.pop()
-        for arc in archieves:
+            archives.pop()
+        for arc in archives:
             run("rm -rf {}".format(arc))
