@@ -15,7 +15,6 @@ def do_clean(number=0):
       number: variable that keeps the most recent archives
     """
 
-
     number = int(number)
     if number == 0:
         number = 1
