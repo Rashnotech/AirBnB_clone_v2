@@ -6,6 +6,7 @@ from fabric.api import run, local, env, lcd, cd
 
 env.hosts = ["35.174.208.242", "54.162.47.71"]
 env.user = "ubuntu"
+env.key_filename = "~/.ssh/school"
 
 
 def do_clean(number=0):
@@ -18,22 +19,16 @@ def do_clean(number=0):
     number = int(number)
     if number == 0:
         number = 1
-        print(number)
 
     archives = sorted(os.listdir("versions"))
-    for i in range(number):
-        archives.pop()
     with lcd("versions"):
-        for arc in archives:
-            local("rm {}".format(arc))
+        to_delete = archives[:-number]
+        for archive in to_delete:
+            local("rm {}".format(archive))
 
     with cd("/data/web_static/releases"):
-        archieves = run("ls -tr").split()
-        for arc in archieves:
-            if "web_static_" in arc:
-                archieves = arc
-        archieves = list(archieves)
-        for i in range(number):
-            archieves.pop()
-        for arc in archieves:
-            run("rm -rf {}".format(arc))
+        archives = run("ls -tr").split()
+        to_delete = [archive for archive in archives if 'web_static_' in
+                     archive][:-number]
+        for archive in to_delete:
+            run("rm -rf {}".format(archive))
