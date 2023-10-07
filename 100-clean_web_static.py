@@ -17,6 +17,7 @@ def do_clean(number=0):
     number = int(number)
     if number == 0:
         number = 1
+        print(number)
 
     archives = sorted(os.listdir("versions"))
     for _ in range(number):
