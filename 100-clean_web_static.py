@@ -7,7 +7,6 @@ from fabric.api import run, local, env, lcd, cd
 env.hosts = ["35.174.208.242", "54.162.47.71"]
 env.user = "ubuntu"
 env.key_filename = "~/.ssh/school"
-env.password = "Rashnotech"
 
 
 def do_clean(number=0):
