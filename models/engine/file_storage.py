@@ -70,3 +70,7 @@ class FileStorage:
                 del FileStorage.__objects[key]
             except KeyError:
                 pass
+
+    def close(self):
+        """ a method that call deserialization"""
+        self.reload()
