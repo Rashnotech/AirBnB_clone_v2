@@ -52,8 +52,8 @@ class DBStorage:
                  }
         obj_dict = {}
         if cls:
-            name = modules[__name__]
-            cls = getattr(name, cls)
+            # name = modules[__name__]
+            # cls = getattr(name, cls)
             result = self.__session.query(cls).all()
         else:
             result = []
