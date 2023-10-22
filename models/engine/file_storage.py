@@ -7,6 +7,7 @@ from models.city import City
 from models.user import User
 from models.amenity import Amenity
 
+
 class FileStorage:
     """This class manages storage of hbnb models in JSON format"""
     __file_path = 'file.json'
