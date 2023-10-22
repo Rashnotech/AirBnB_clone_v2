@@ -7,13 +7,14 @@
         <H1>States</H1>
         <UL>
 		{% for state in data.values()|sort(attribute='name') %}
-		  <LI>{{ state.id }}: <B>{{ state.name }}</B></LI>
+		  <LI>{{ state.id }}: <B>{{ state.name }}</B>
 		  {% if state.cities %}
-		    <ul>
+		    <UL>
 		  	{% for city in state.cities|sort(attribute='name') %}
 			<LI>{{ city.id }}: <B>{{ city.name }}</B></LI>
 			{% endfor %}
-		    </ul>
+		    </UL>
+		   </LI>
 		  {% endif %}
 		{% endfor %}
         </UL>
