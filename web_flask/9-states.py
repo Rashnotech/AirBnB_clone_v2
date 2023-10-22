@@ -22,8 +22,6 @@ def states_list(id=None):
     return render_template('9-states.html', data=data, mode=mod)
 
 
-
-
 @app.teardown_appcontext
 def teardown(self):
     """Teardown conext"""
