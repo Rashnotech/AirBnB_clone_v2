@@ -6,12 +6,12 @@
     <BODY>
         <H1>States</H1>
         <UL>
-		{% for id, name in data | dictsort %}
-		  <LI>{{ id }}: <B>{{ name }}</B></LI>
-		  {% if cities %}
+		{% for state in data.values()|sort(attribute='name') %}
+		  <LI>{{ state.id }}: <B>{{ state.name }}</B></LI>
+		  {% if state.cities %}
 		    <ul>
-		  	{% for id, name in cities|sort %}
-			<LI>{{ id }}: <B>{{ name }}</B></LI>
+		  	{% for city in state.cities|sort(attribute='name') %}
+			<LI>{{ city.id }}: <B>{{ city.name }}</B></LI>
 			{% endfor %}
 		    </ul>
 		  {% endif %}

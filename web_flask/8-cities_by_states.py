@@ -10,14 +10,11 @@ app = Flask(__name__)
 @app.route('/cities_by_states', strict_slashes=False)
 def states_list():
     data = storage.all(State)
-    cities = data['cities']
-    if storage_type != 'db':
-        cities = State.cities
-    return render_template('8-cities_by_states.html', data=data, cities=cities)
+    return render_template('8-cities_by_states.html', data=data)
 
 
 @app.teardown_appcontext
-def teardown():
+def teardown(self):
     storage.close()
 
 
