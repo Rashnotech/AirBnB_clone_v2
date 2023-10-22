@@ -52,8 +52,8 @@ class DBStorage:
                  }
         obj_dict = {}
         if cls:
-            # name = modules[__name__]
-            # cls = getattr(name, cls)
+            name = modules[__name__]
+            cls = getattr(name, cls.__name__)
             result = self.__session.query(cls).all()
         else:
             result = []
@@ -98,4 +98,4 @@ class DBStorage:
 
     def close(self):
         """a method that callremove method"""
-        self.__session.close()
+        self.__session.remove()
