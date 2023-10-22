@@ -15,6 +15,7 @@ def states_list():
 
 @app.teardown_appcontext
 def teardown():
+    """Teardown conext"""
     storage.close()
 
 
