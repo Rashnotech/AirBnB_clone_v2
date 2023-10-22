@@ -6,7 +6,7 @@
     <BODY>
         <H1>States</H1>
         <UL>
-		{% for state in data.values() | dictsort %}
+		{% for state in data.values() | dictsort(attribute='name') %}
 		  <LI>{{ state.id }}: <B>{{ state.name }}</B></LI>
 		{% endfor %}
         </UL>
