@@ -10,15 +10,17 @@ app = Flask(__name__)
 @app.route('/states', strict_slashes=False)
 @app.route('/states/<id>', strict_slashes=False)
 def states_list(id=None):
+    mod = 0
     data = storage.all(State)
-    for state in data.values():
-        if state.id == id:
-            mod = 1
-            return render_template('9-states.html', data=state, mode=mod)
-        elif state.id != id and id is not None:
-            mod = 0
-        else:
-            mod = 2
+    if len(data.values()) != 0:
+        for state in data.values():
+            if state.id == id:
+                mod = 1
+                return render_template('9-states.html', data=state, mode=mod)
+            elif state.id != id and id is not None:
+                mod = 0
+            else:
+                mod = 2
     return render_template('9-states.html', data=data, mode=mod)
 
 
